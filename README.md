@@ -16,11 +16,6 @@ A modern, thin API wrapper for the UniFi Access API. This library provides a cle
 pip install unifi_access
 ```
 
-For development:
-
-```bash
-pip install unifi_access[dev]
-```
 
 ## Quick Start
 
