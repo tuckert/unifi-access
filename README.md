@@ -147,21 +147,6 @@ The client provides the following manager interfaces:
 - **`client.https_certificates`**: HTTPS certificate management
 - **`client.notifications`**: Notification management
 
-## Webhook Support
-
-The library includes webhook listener utilities for real-time event handling:
-
-```python
-from webhook_listener import WebhookListener, WebhookManager
-
-# Set up webhook listener
-listener = WebhookListener(port=8080)
-listener.start()
-
-# Or use the webhook manager for more control
-manager = WebhookManager(client)
-manager.register_handler("door.unlock", handle_door_unlock)
-```
 
 ## Requirements
 
