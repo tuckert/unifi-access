@@ -166,11 +166,8 @@ manager.register_handler("door.unlock", handle_door_unlock)
 ## Requirements
 
 - Python 3.8+
-- requests >= 2.28.0
 - httpx >= 0.23.0
-- pydantic >= 1.10, < 2.0
-- python-dotenv >= 1.0.0
-- fastmcp >= 0.3.0
+
 
 ## License
 
@@ -182,9 +179,9 @@ Travis Tucker
 
 ## Links
 
-- [Documentation](https://github.com/yourusername/unifi_access)
-- [Bug Tracker](https://github.com/yourusername/unifi_access/issues)
-- [Source Code](https://github.com/yourusername/unifi_access)
+- [Documentation](https://github.com/tuckert/unifi-access)
+- [Bug Tracker](https://github.com/tuckert/unifi-access/issues)
+- [Source Code](https://github.com/tuckert/unifi-access)
 
 ## Contributing
 
