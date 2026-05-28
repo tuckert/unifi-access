@@ -442,7 +442,7 @@ class UserManager:
             data["emails"] = emails
         return self.client._make_request("PUT", path, json=data)
 
-    def asssign_license_plate_numbers_to_user(self, user_id: str, license_plate_numbers: List[str]):
+    def assign_license_plate_numbers_to_user(self, user_id: str, license_plate_numbers: List[str]):
         path = f"/developer/users/{user_id}/license_plates"
         return self.client._make_request("PUT", path, json=license_plate_numbers)
 

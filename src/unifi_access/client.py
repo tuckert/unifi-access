@@ -128,8 +128,6 @@ class UniFiAccessClient:
         )
         self.session.headers.update({
             'Authorization': f"Bearer {self.api_token}",
-            # 'accept': 'application/json',
-            # 'content-type': 'application/json'
         })
         self.session.timeout = int(os.getenv('UNIFI_SESSION_TIMEOUT', 10))
         logger.debug("Session configured: timeout=%s seconds", self.session.timeout)

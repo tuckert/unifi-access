@@ -47,6 +47,8 @@ client = UniFiAccessClient(
 ```
 ## Usage Examples
 
+Most methods/functions are named identical to Unifi Access API documentation section headings.  IE:  From the unifi docs "7.5 Fetch All Door Groups" the method will be client.spaces.fetch_all_door_groups()
+
 ### User Management
 
 ```python
@@ -74,14 +76,45 @@ if users:
 visitor = client.visitors.create_visitor(
     first_name="John",
     last_name="Doe",
-    start_time="2026-01-10T09:00:00",
-    end_time="2026-01-10T17:00:00",
-    email="john.doe@example.com"
+    start_time=1688546460, # Unix timestamp in timezone of the location
+    end_time=1688572799, 
+    email="john.doe@example.com",
+    resources=[
+        {
+            "id": "door_id_123",
+            "type": "door"
+        }
+    ],
+    week_schedule={
+        "sunday": [],
+        "monday": [],
+        "tuesday": [
+            # Single time slot
+            {
+                "start_time": "00:06:00", # 6 am
+                "end_time": "18:00:00" # 6 pm
+            }
+        ],
+        "wednesday": [],
+        "thursday": [
+            # Multiple time slots in single day.
+            {
+                "start_time": "00:06:00",
+                "end_time": "00:09:00", # 9 am
+            },
+            {
+                "start_time": "18:00:00", # 6 pm
+                "end_time": "23:59:00" # Midnight
+            }
+        ],
+        "friday": [],
+        "saturday": []        
+    }
 )
 
 # Manage visitor
-client.visitors.assign_nfc_card(visitor['id'], "card_token_456")
-client.visitors.assign_pin_code(visitor['id'], "1234")
+client.visitors.assign_nfc_card_to_visitor(visitor['id'], "card_token_456")
+client.visitors.assign_pin_code_to_visitor(visitor['id'], "1234")
 client.visitors.update_visitor(visitor['id'], remarks="VIP visitor")
 client.visitors.delete_visitor(visitor['id'])
 ```
@@ -98,14 +131,14 @@ if doors:
 
     # Control doors
     client.spaces.unlock_door(door['id'])
-    client.spaces.set_temporary_door_lock_rule(door['id'], "keep_unlock", 3600)  # Keep unlocked for 1 hour
+    client.spaces.set_temporary_door_locking_rule(door['id'], "keep_unlock", 60)  # Keep unlocked for 1 hour
 ```
 
 ### Access Policy Management
 
 ```python
 # List all access policies
-policies = client.access_policies.list_access_policies()
+policies = client.access_policies.fetch_all_access_policies()
 
 if policies:
     policy = policies[0]
@@ -119,7 +152,7 @@ if policies:
 ### Async Support
 
 ```python
-from client import AsyncUniFiAccessClient
+from unifi_access.client import AsyncUniFiAccessClient
 
 # Use async client for high-performance applications
 async with AsyncUniFiAccessClient() as client:
@@ -141,6 +174,7 @@ The client provides the following manager interfaces:
 - **`client.system_logs`**: System log retrieval
 - **`client.https_certificates`**: HTTPS certificate management
 - **`client.notifications`**: Notification management
+- **`client.identity`**: Identity management (Invitations, resources)
 
 
 ## Requirements

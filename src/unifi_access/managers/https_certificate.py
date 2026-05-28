@@ -40,9 +40,7 @@ class HttpsCertificateManager:
             "key": key,
             "cert": cert
         }
-        print(files)
         result = self.client._make_request("POST", path, files=files)
-        print(result)
         return result
 
     def delete_https_certificate(self) -> Dict[str, Any]:
