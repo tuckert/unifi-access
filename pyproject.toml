@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "unifi_access"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
     { name = "Travis Tucker" }
 ]
@@ -33,9 +33,9 @@ dependencies = [
 ]
 
 [project.urls]
-"Bug Tracker" = "https://github.com/travis-tucker/unifi_access/issues"
-"Documentation" = "https://github.com/travis-tucker/unifi_access"
-"Source Code" = "https://github.com/travis-tucker/unifi_access"
+"Bug Tracker" = "https://github.com/tuckert/unifi-access/issues"
+"Documentation" = "https://github.com/tuckert/unifi-access"
+"Source Code" = "https://github.com/tuckert/unifi-access"
 
 [tool.setuptools.packages.find]
 where = ["src"]

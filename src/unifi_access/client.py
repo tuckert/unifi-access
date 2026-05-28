@@ -20,6 +20,7 @@ from .managers.device import DeviceManager
 from .managers.system_log import SystemLogManager
 from .managers.https_certificate import HttpsCertificateManager
 from .managers.notification import NotificationManager
+from .managers.identity import IdentityManager
 
 
 logger = logging.getLogger(__name__)
@@ -51,6 +52,7 @@ class UniFiAccessClient:
     system_logs: SystemLogManager
     https_certificates: HttpsCertificateManager
     notifications: NotificationManager
+    identity: IdentityManager
 
     def __init__(
             self,
@@ -143,6 +145,7 @@ class UniFiAccessClient:
         self.system_logs = SystemLogManager(self)
         self.https_certificates = HttpsCertificateManager(self)
         self.notifications = NotificationManager(self)
+        self.identity = IdentityManager(self)
 
 
     def _make_request(self, method, path, **kwargs):
