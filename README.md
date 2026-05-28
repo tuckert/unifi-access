@@ -91,7 +91,7 @@ visitor = client.visitors.create_visitor(
         "tuesday": [
             # Single time slot
             {
-                "start_time": "00:06:00", # 6 am
+                "start_time": "06:00:00", # 6 am
                 "end_time": "18:00:00" # 6 pm
             }
         ],
@@ -99,12 +99,12 @@ visitor = client.visitors.create_visitor(
         "thursday": [
             # Multiple time slots in single day.
             {
-                "start_time": "00:06:00",
-                "end_time": "00:09:00", # 9 am
+                "start_time": "06:00:00",
+                "end_time": "09:00:00", # 9 am
             },
             {
                 "start_time": "18:00:00", # 6 pm
-                "end_time": "23:59:00" # Midnight
+                "end_time": "23:59:59" # Midnight
             }
         ],
         "friday": [],
