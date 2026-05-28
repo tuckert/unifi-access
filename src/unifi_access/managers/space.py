@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from ..client import UniFiAccessClient
@@ -177,6 +177,9 @@ class SpaceManager:
     def unlock_door(
         self,
         door_id: str,
+        reader_id: Optional[str] = None,
+        entry_method: Optional[Literal["in", "out"]] = None,
+        control_cmd: Optional[Literal["open", "close", "stop"]] = None,
         actor_id: Optional[str] = None,
         actor_name: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
@@ -186,6 +189,12 @@ class SpaceManager:
 
         Args:
             door_id (str): The door's ID.
+            reader_id (Optional[str]): Displays the greeting messsage only on the device with the specified ID.
+            entry_method (Optional[str]): In double-driveway mode, in and out define the gate opening direction.
+            control_cmd (Optional[str]): In three-button mode (UA Hub gate), supported commands are open, close, and stop.
+            actor_id (Optional[str]): Custom actor ID to be shown in logs and wehbooks.
+            actor_name (Optional[str]): Custom actor name to be shown in logs and wehbooks.
+            extra (Optional[Dict[str, Any]]): Custom passthrough data included as-is in webhook payloads.
 
         Returns:
             API response body as a dictionary.
@@ -193,9 +202,25 @@ class SpaceManager:
         Notes:
             - Request URL: /developer/doors/:id/unlock
             - Permission Key: edit:space
-            - Method: POST
+            - Method: PUT
             - UniFi Access Requirement: Version 2.2.6 or later for UA-Ultra
         """
+        if entry_method and entry_method not in ["in", "out"]:
+            raise ValueError("entry_method must be 'in' or 'out'")
+
+        if control_cmd and control_cmd not in ["open", "close", "stop"]:
+            raise ValueError("control_cmd must be 'open', 'close', or 'stop'")
+
+        if actor_id and not actor_name or actor_name and not actor_id:
+            raise ValueError("actor_id and actor_name must be provided together")
+
+        params = {}
+        if reader_id:
+            params["reader_id"] = reader_id
+        if entry_method:
+            params["entry_method"] = entry_method
+        if control_cmd:
+            params["control_cmd"] = control_cmd
 
         payload = {
             "actor_id": actor_id,
@@ -203,20 +228,25 @@ class SpaceManager:
             "extra": extra
         }
         path = f"/developer/doors/{door_id}/unlock"
-        return self.client._make_request("PUT", path, json=payload)
+        return self.client._make_request("PUT", path, json=payload, params=params)
 
-    def set_temporary_door_lock_rule(self, door_id: str, unlock_type: str, duration: int = None) -> Dict[str, Any]:
+    def set_temporary_door_locking_rule(
+        self,
+        door_id: str,
+        type: Literal["keep_lock", "keep_unlock", "custom", "reset", "lock_early", "lock_now"],
+        interval: Optional[int] = None
+    ) -> Dict[str, Any]:
         """
-        Set a temporary door locking rule.
+        Set a temporary door locking (and unlocking) rule.
 
         Args:
             door_id (str): The door's ID.
             type (str): enum type {keep_lock,keep_unlock,custom,reset,lock_early} keep_lock is used to
-set the door to the "keep locked" state, while keep_unlock is used to set it to the "keep unlocked"
-state. custom allows customization of the unlock time duration, and reset is used to restore the
-door to its initial state (not applicable to the "lock_early" state). NOTE: If the door is currently on an
-unlock schedule ( schedule ), you can use lock_early to lock the door early.
-            lock_state (str): State to set ("locked" or "unlocked", default: "locked").
+                        set the door to the "keep locked" state, while keep_unlock is used to set it to the "keep unlocked"
+                        state. custom allows customization of the unlock time duration, and reset is used to restore the
+                        door to its initial state (not applicable to the "lock_early" state). NOTE: If the door is currently on an
+                        unlock schedule ( schedule ), you can use lock_early to lock the door early.
+            interval (Optional[int]): The duration of the custom unlock time in minutes.
 
         Returns:
             API response body as a dictionary.
@@ -224,18 +254,18 @@ unlock schedule ( schedule ), you can use lock_early to lock the door early.
         Notes:
             - Request URL: /developer/doors/:id/locking-rule
             - Permission Key: edit:space
-            - Method: POST
+            - Method: PUT
             - UniFi Access Requirement: Version 3.1.30 or later for EAH8, UA-Hub-Door-Mini, UA-Ultra
         """
         path = f"/developer/doors/{door_id}/lock_rule"
         data = {
-            "type": unlock_type,
+            "type": type,
         }
-        if duration is not None:
-            data["interval"] = duration,
+        if interval is not None:
+            data["interval"] = interval
         return self.client._make_request("PUT", path, json=data)
 
-    def get_door_lock_rule(self, door_id: str) -> Dict[str, Any]:
+    def fetch_door_lock_rule(self, door_id: str) -> Dict[str, Any]:
         """
         Fetch the current door locking rule.
 
