@@ -51,18 +51,20 @@ class VisitorManager:
             end_time: ISO-8601 (no timezone) Example: "2025-12-25T17:00:00".
             remarks: Optional remarks/notes about the visitor.
             mobile_phone: Optional phone number.
-            company_name: Optional company name associated with the visitor.
             email: Optional visitor email.
-            visitor_company: Optional visitor company name (if different).
-
+            visitor_company: Optional visitor company name.
             visit_reason: Optional Default "Others", options: "Interview", "Business", "Cooperation", "Others".
-            resources: List of doors or door groups and IDs obtained from "spaces" manager.  Example: [{"id": "9bee6e0e-108d4c52-9107-76f2c7dea4f1", "type": "door"}]
-            week_schedule: Optional weekly schedule. The customizable scheduling strategy for each day from Sunday to Saturday. If not specified, it means access is allowed every day.
-                Example week_schedule: {"sunday": [], "monday": [{"start_time": "10:00:00", "end_time": "17:00:59"}], "tuesday": [], "wednesday": [], "thursday": [], "friday": [], "saturday": []}
-            **kwargs: Optional Additional fields that may be supported by the API.
+            resources: List of doors or door groups and IDs obtained from "spaces" manager.
+            week_schedule: Optional weekly schedule.
+            **kwargs: Optional additional fields.
 
         Returns:
             Visitor data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/visitors
+            - Permission Key: edit:visitor
+            - Method: POST
         """
         path = "/developer/visitors"
         data = {
@@ -118,6 +120,11 @@ class VisitorManager:
 
         Returns:
             Updated visitor data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/visitors/:id
+            - Permission Key: edit:visitor
+            - Method: PUT
         """
         path = f"/developer/visitors/{visitor_id}"
         data = {
@@ -254,9 +261,9 @@ class VisitorManager:
             API response body as a dictionary.
 
         Notes:
-            - Request URL: /developer/visitors/:id/pin-code
+            - Request URL: /developer/visitors/:id/pin_codes
             - Permission Key: edit:visitor
-            - Method: POST
+            - Method: PUT
         """
         path = f"/developer/visitors/{visitor_id}/pin_codes"
         data = {"pin_code": pin_code}
@@ -280,20 +287,72 @@ class VisitorManager:
         return self.client._make_request("DELETE", path)
 
     def assign_qr_code_to_visitor(self, visitor_id: str) -> None:
-        """Assign a QR code to a visitor."""
+        """Assign a QR code to a visitor.
+
+        Args:
+            visitor_id: Target visitor's ID.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/visitors/:id/qr-codes
+            - Permission Key: edit:visitor
+            - Method: PUT
+        """
         path = f"/developer/visitors/{visitor_id}/qr-codes"
         return self.client._make_request("PUT", path)
 
     def unassign_qr_code_from_visitor(self, visitor_id: str) -> None:
-        """Unassign/remove a QR code from a visitor."""
+        """Unassign/remove a QR code from a visitor.
+
+        Args:
+            visitor_id: Target visitor's ID.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/visitors/:id/qr-codes
+            - Permission Key: edit:visitor
+            - Method: DELETE
+        """
         path = f"/developer/visitors/{visitor_id}/qr-codes"
         return self.client._make_request("DELETE", path)
 
-    def assign_license_plate_numbers_to_visitor(self, visitor_id: str, numbers: List[str]):
+    def assign_license_plate_numbers_to_visitor(self, visitor_id: str, numbers: List[str]) -> Dict[str, Any]:
+        """Assign license plate numbers to a visitor.
+
+        Args:
+            visitor_id: Target visitor's ID.
+            numbers: List of license plate numbers.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/visitors/:id/license_plates
+            - Permission Key: edit:visitor
+            - Method: PUT
+        """
         path = f"/developer/visitors/{visitor_id}/license_plates"
         data = {"numbers": numbers}
         return self.client._make_request("PUT", path, json=data)
 
-    def unassign_license_plate_numbers_from_visitor(self, visitor_id: str, license_plate_id: str):
+    def unassign_license_plate_numbers_from_visitor(self, visitor_id: str, license_plate_id: str) -> Dict[str, Any]:
+        """Unassign a license plate number from a visitor.
+
+        Args:
+            visitor_id: Target visitor's ID.
+            license_plate_id: License plate ID to remove.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/visitors/:id/license_plates/:license_plate_id
+            - Permission Key: edit:visitor
+            - Method: DELETE
+        """
         path = f"/developer/visitors/{visitor_id}/license_plates/{license_plate_id}"
         return self.client._make_request("DELETE", path)

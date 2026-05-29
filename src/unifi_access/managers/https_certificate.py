@@ -30,6 +30,7 @@ class HttpsCertificateManager:
             - Request URL: /developer/api_server/certificates
             - Permission Key: edit:api_server
             - Method: POST
+            - UniFi Access Requirement: Version 2.2.10 or later
         """
         path = "/developer/api_server/certificates"
         files = {
@@ -53,6 +54,7 @@ class HttpsCertificateManager:
             - Request URL: /developer/api_server/certificates/
             - Permission Key: edit:api_server
             - Method: DELETE
+            - UniFi Access Requirement: Version 2.2.10 or later
         """
         path = "/developer/api_server/certificates/"
         return self.client._make_request("DELETE", path)

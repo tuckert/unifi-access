@@ -27,7 +27,7 @@ class SpaceManager:
             Door group topology details as a dictionary.
 
         Notes:
-            - Request URL: /developer/door-groups/topology
+            - Request URL: /developer/door_groups/topology
             - Permission Key: view:space
             - Method: GET
         """
@@ -39,18 +39,17 @@ class SpaceManager:
             name: str,
             door_ids: List[str]
     ) -> Dict[str, Any]:
-        """
-        Create a new door group.
+        """Create a new door group.
 
         Args:
-            name (str): Name of the door group.
-            door_ids (list[str]): List of door IDs to include in the group.
+            name: Name of the door group.
+            door_ids: List of door IDs to include in the group.
 
         Returns:
             Door group data as a dictionary.
 
         Notes:
-            - Request URL: /developer/door-groups
+            - Request URL: /developer/door_groups
             - Permission Key: edit:space
             - Method: POST
         """
@@ -62,17 +61,16 @@ class SpaceManager:
         return self.client._make_request("POST", path, json=data)
 
     def fetch_door_group(self, group_id: str) -> Dict[str, Any]:
-        """
-        Fetch a door group's details.
+        """Fetch a door group's details.
 
         Args:
-            group_id (str): The door group's ID.
+            group_id: The door group's ID.
 
         Returns:
             Door group data as a dictionary.
 
         Notes:
-            - Request URL: /developer/door-groups/:id
+            - Request URL: /developer/door_groups/:id
             - Permission Key: view:space
             - Method: GET
         """
@@ -85,19 +83,18 @@ class SpaceManager:
         name: Optional[str] = None,
         door_ids: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
-        """
-        Update an existing door group.
+        """Update an existing door group.
 
         Args:
-            group_id (str): The door group's ID.
-            name (str, optional): New name for the group.
-            door_ids (list[str], optional): New list of door IDs.
+            group_id: The door group's ID.
+            name: New name for the group (optional).
+            door_ids: New list of door IDs (optional).
 
         Returns:
             Updated door group data as a dictionary.
 
         Notes:
-            - Request URL: /developer/door-groups/:id
+            - Request URL: /developer/door_groups/:id
             - Permission Key: edit:space
             - Method: PUT
         """
@@ -110,13 +107,13 @@ class SpaceManager:
         return self.client._make_request("PUT", path, json=data)
 
     def fetch_all_door_groups(self) -> List[Dict[str, Any]]:
-        """
-        Fetch all door groups with pagination.
+        """Fetch all door groups.
+
         Returns:
             A list of door group data dictionaries.
 
         Notes:
-            - Request URL: /developer/door-groups
+            - Request URL: /developer/door_groups
             - Permission Key: view:space
             - Method: GET
         """
@@ -124,17 +121,16 @@ class SpaceManager:
         return self.client._make_request("GET", path)
 
     def delete_door_group(self, group_id: str) -> Dict[str, Any]:
-        """
-        Delete a door group.
+        """Delete a door group.
 
         Args:
-            group_id (str): The door group's ID.
+            group_id: The door group's ID.
 
         Returns:
             API response body (may be empty depending on API behavior).
 
         Notes:
-            - Request URL: /developer/door-groups/:id
+            - Request URL: /developer/door_groups/:id
             - Permission Key: edit:space
             - Method: DELETE
         """
@@ -142,11 +138,10 @@ class SpaceManager:
         return self.client._make_request("DELETE", path)
 
     def fetch_door(self, door_id: str) -> Dict[str, Any]:
-        """
-        Fetch a door's details.
+        """Fetch a door's details.
 
         Args:
-            door_id (str): The door's ID.
+            door_id: The door's ID.
 
         Returns:
             Door data as a dictionary.
@@ -160,8 +155,7 @@ class SpaceManager:
         return self.client._make_request("GET", path)
 
     def fetch_all_doors(self) -> List[Dict[str, Any]]:
-        """
-        Fetch all doors with pagination.
+        """Fetch all doors.
 
         Returns:
             A list of door data dictionaries.
@@ -184,17 +178,16 @@ class SpaceManager:
         actor_name: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """
-        Remotely unlock a door.
+        """Remotely unlock a door.
 
         Args:
-            door_id (str): The door's ID.
-            reader_id (Optional[str]): Displays the greeting messsage only on the device with the specified ID.
-            entry_method (Optional[str]): In double-driveway mode, in and out define the gate opening direction.
-            control_cmd (Optional[str]): In three-button mode (UA Hub gate), supported commands are open, close, and stop.
-            actor_id (Optional[str]): Custom actor ID to be shown in logs and wehbooks.
-            actor_name (Optional[str]): Custom actor name to be shown in logs and wehbooks.
-            extra (Optional[Dict[str, Any]]): Custom passthrough data included as-is in webhook payloads.
+            door_id: The door's ID.
+            reader_id: Displays the greeting message only on the device with the specified ID.
+            entry_method: In double-driveway mode, "in" and "out" define the gate opening direction.
+            control_cmd: In three-button mode (UA Hub gate), supported commands are "open", "close", and "stop".
+            actor_id: Custom actor ID to be shown in logs and webhooks.
+            actor_name: Custom actor name to be shown in logs and webhooks.
+            extra: Custom passthrough data included as-is in webhook payloads.
 
         Returns:
             API response body as a dictionary.
@@ -236,23 +229,18 @@ class SpaceManager:
         type: Literal["keep_lock", "keep_unlock", "custom", "reset", "lock_early", "lock_now"],
         interval: Optional[int] = None
     ) -> Dict[str, Any]:
-        """
-        Set a temporary door locking (and unlocking) rule.
+        """Set a temporary door locking (and unlocking) rule.
 
         Args:
-            door_id (str): The door's ID.
-            type (str): enum type {keep_lock,keep_unlock,custom,reset,lock_early} keep_lock is used to
-                        set the door to the "keep locked" state, while keep_unlock is used to set it to the "keep unlocked"
-                        state. custom allows customization of the unlock time duration, and reset is used to restore the
-                        door to its initial state (not applicable to the "lock_early" state). NOTE: If the door is currently on an
-                        unlock schedule ( schedule ), you can use lock_early to lock the door early.
-            interval (Optional[int]): The duration of the custom unlock time in minutes.
+            door_id: The door's ID.
+            type: Rule type. Options: "keep_lock", "keep_unlock", "custom", "reset", "lock_early", "lock_now".
+            interval: The duration of the custom unlock time in minutes.
 
         Returns:
             API response body as a dictionary.
 
         Notes:
-            - Request URL: /developer/doors/:id/locking-rule
+            - Request URL: /developer/doors/:id/lock_rule
             - Permission Key: edit:space
             - Method: PUT
             - UniFi Access Requirement: Version 3.1.30 or later for EAH8, UA-Hub-Door-Mini, UA-Ultra
@@ -266,17 +254,16 @@ class SpaceManager:
         return self.client._make_request("PUT", path, json=data)
 
     def fetch_door_lock_rule(self, door_id: str) -> Dict[str, Any]:
-        """
-        Fetch the current door locking rule.
+        """Fetch the current door locking rule.
 
         Args:
-            door_id (str): The door's ID.
+            door_id: The door's ID.
 
         Returns:
             Door locking rule details as a dictionary.
 
         Notes:
-            - Request URL: /developer/doors/:id/locking-rule
+            - Request URL: /developer/doors/:id/lock_rule
             - Permission Key: view:space
             - Method: GET
         """
@@ -284,18 +271,17 @@ class SpaceManager:
         return self.client._make_request("GET", path)
 
     def set_door_emergency_status(self, lockdown: bool, evacuation: bool) -> Dict[str, Any]:
-        """
-        Set the emergency status for a door.
+        """Set the emergency status for doors.
 
         Args:
-            lockdown (bool): True will keep the door locked
-            evacuation (bool): True will keep the door unlocked
+            lockdown: If true, keep all doors locked.
+            evacuation: If true, keep all doors unlocked.
 
         Returns:
             API response body as a dictionary.
 
         Notes:
-            - Request URL: /developer/doors/:id/emergency-status
+            - Request URL: /developer/doors/settings/emergency
             - Permission Key: edit:space
             - Method: POST
         """
@@ -307,11 +293,7 @@ class SpaceManager:
         return self.client._make_request("POST", path, json=data)
 
     def fetch_door_emergency_status(self) -> Dict[str, Any]:
-        """
-        Fetch the emergency status of a door.
-
-        Args:
-            door_id (str): The door's ID.
+        """Fetch the current emergency status of doors.
 
         Returns:
             Door emergency status details as a dictionary.

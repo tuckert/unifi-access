@@ -33,7 +33,7 @@ class SystemLogManager:
 
         Args:
             topic: Topic or list of topics to filter, e.g.,
-                {critical, door_openings, updates, device_events, admin_activity, visitor}.
+                "critical", "door_openings", "updates", "device_events", "admin_activity", "visitor".
             page_num: Page number (server default if omitted).
             page_size: Page size (server default if omitted).
             since: Start of time range as Unix timestamp.
@@ -42,6 +42,11 @@ class SystemLogManager:
 
         Returns:
             API response containing the filtered system log entries.
+
+        Notes:
+            - Request URL: /developer/system/logs
+            - Permission Key: view:system_log
+            - Method: POST
         """
 
         path = "/developer/system/logs"
@@ -61,139 +66,79 @@ class SystemLogManager:
 
         return self.client._make_request("POST", path, json=data, params=params)
 
-    def export_logs(
+    def export_system_logs(
         self,
-        start_time: Optional[int] = None,
-        end_time: Optional[int] = None,
-        topics: Optional[List[str]] = None,
+        since: int,
+        until: int,
+        timezone: str,
+        topic: SystemLogTopic = "all",
     ) -> bytes:
         """Export system logs as a file (e.g., CSV or JSON).
 
         Args:
-            start_time: Start timestamp (Unix epoch) for log filtering.
-            end_time: End timestamp (Unix epoch) for log filtering.
-            topics: List of topics to filter logs (e.g., ["access.door.unlock"]).
+            since: Start timestamp (Unix epoch) for log filtering.
+            until: End timestamp (Unix epoch) for log filtering.
+            timezone: Timezone identifier for log timestamps.
+            topic: Topic to filter logs (e.g., "access.door.unlock").
 
         Returns:
             Raw file content (e.g., CSV or JSON data).
 
         Notes:
-            - Request URL: /developer/system-logs/export
+            - Request URL: /developer/system/logs/export
             - Permission Key: view:system_log
-            - Method: GET
+            - Method: POST
             - Returns raw file content instead of JSON-parsed data.
         """
         path = "/developer/system/logs/export"
-        params: Dict[str, Any] = {}
-        if start_time:
-            params["start_time"] = start_time
-        if end_time:
-            params["end_time"] = end_time
-        if topics:
-            params["topics"] = topics
+        data = {
+            "since": since,
+            "until": until,
+            "timezone": timezone,
+            "topic": topic
+        }
 
-        # Override headers for raw file response
-        headers = self.client.session.headers.copy()
-        headers.pop("Accept", None)  # Remove JSON accept header to get raw file
-        response = self.client.session.get(
-            f"{self.client.base_url}{path}",
-            params=params,
-            verify=self.client.verify_ssl,
-            headers=headers
-        )
+        return self.client._make_request("POST", path, json=data, raw_response=True)
 
-        if response.status_code != 200:
-            raise self.client._make_request("GET", path, params=params)  # Trigger standard error handling
-
-        return response.content
-
-    def fetch_resources(
+    def fetch_resources_in_system_logs(
         self,
-        resource_type: Optional[str] = None,
-        page_num: Optional[int] = None,
-        page_size: Optional[int] = None,
+        id: Optional[str] = None,
+
     ) -> List[Dict[str, Any]]:
         """Fetch resources mentioned in system logs.
 
         Args:
-            resource_type: Type of resource to filter (e.g., "door", "user").
-            page_num: Page number (server default if omitted).
-            page_size: Number of resources per page (server default if omitted).
+            id: Resource ID is obtained from targets catergorized as the "activities_resource" type in system logs.
 
         Returns:
             A list of resource dictionaries.
 
         Notes:
-            - Request URL: /developer/system-logs/resources
+            - Request URL: /developer/system/logs/resources/:id
             - Permission Key: view:system_log
             - Method: GET
         """
-        path = "/developer/system-logs/resources"
-        params: Dict[str, Any] = {
-            "page_num": page_num,
-            "page_size": page_size
-        }
-        if resource_type:
-            params["resource_type"] = resource_type
-        return self.client._make_request("GET", path, params=params)
+        path = f"/developer/system/logs/resources/{id}"
 
-    def fetch_static_resources(
+        return self.client._make_request("GET", path)
+
+    def fetch_static_resources_in_system_logs(
         self,
-        resource_type: Optional[str] = None,
-        page_num: Optional[int] = None,
-        page_size: Optional[int] = None,
+        path: str
     ) -> List[Dict[str, Any]]:
         """Fetch static resources mentioned in system logs.
 
         Args:
-            resource_type: Type of resource to filter (e.g., "door", "user").
-            page_num: Page number (server default if omitted).
-            page_size: Number of resources per page (server default if omitted).
+            path: Path to the static resource.
 
         Returns:
             A list of static resource dictionaries.
 
         Notes:
-            - Request URL: /developer/system-logs/static-resources
+            - Request URL: /developer/system/static/:path
             - Permission Key: view:system_log
             - Method: GET
         """
-        path = "/developer/system-logs/static-resources"
-        params: Dict[str, Any] = {
-            "page_num": page_num,
-            "page_size": page_size
-        }
-        if resource_type:
-            params["resource_type"] = resource_type
-        return self.client._make_request("GET", path, params=params)
+        path = f"/developer/system/static/{path}"
 
-    def fetch_yesterday_logs(
-        self,
-        topic: SystemLogTopic = "all",
-        page_num: Optional[int] = None,
-        page_size: Optional[int] = None,
-        actor_id: Optional[str] = None,
-    ) -> Dict[str, Any]:
-        """Fetch all system logs from the previous full day (00:00:00 to 23:59:59).
-
-        Args:
-            topic: Topic or list of topics to filter.
-            page_num: Page number.
-            page_size: Page size.
-            actor_id: Filter logs generated by a specific actor ID.
-
-        Returns:
-            API response containing yesterday's system log entries.
-        """
-        yesterday = datetime.now().date() - timedelta(days=1)
-        since = int(datetime.combine(yesterday, time.min).timestamp())
-        until = int(datetime.combine(yesterday, time.max).timestamp())
-
-        return self.fetch_system_logs(
-            topic=topic,
-            page_num=page_num,
-            page_size=page_size,
-            since=since,
-            until=until,
-            actor_id=actor_id,
-        )
+        return self.client._make_request("GET", path)

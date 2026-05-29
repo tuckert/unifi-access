@@ -129,7 +129,7 @@ class UniFiAccessClient:
         self.session.headers.update({
             'Authorization': f"Bearer {self.api_token}",
         })
-        self.session.timeout = int(os.getenv('UNIFI_SESSION_TIMEOUT', 10))
+        self.session.timeout = int(os.getenv('UNIFI_SESSION_TIMEOUT', 15))
         logger.debug("Session configured: timeout=%s seconds", self.session.timeout)
         self.base_url += f":{self.port}/api/v1"
         logger.debug("Computed base API URL: %s", self.base_url)
@@ -146,17 +146,18 @@ class UniFiAccessClient:
         self.identity = IdentityManager(self)
 
 
-    def _make_request(self, method, path, **kwargs):
+    def _make_request(self, method, path, raw_response=False, **kwargs):
         """
         Make an HTTP request to the API.
 
         Args:
             method (str): HTTP method (e.g., 'GET', 'POST').
             path (str): API endpoint path (e.g., '/api/v1/developer/users').
+            raw_response (bool): Whether to return the raw response content.
             **kwargs: Additional arguments for requests (e.g., json, params).
 
         Returns:
-            dict or list: The 'data' field from the API response.
+            dict, list or bytes: The 'data' field from the API response, or raw bytes if raw_response is True.
 
         Raises:
             UniFiAccessError: If the API returns an error.
@@ -191,6 +192,9 @@ class UniFiAccessClient:
                     _preview(getattr(response, 'text', '')),
                 )
                 raise UniFiAccessError(f"HTTP_{response.status_code}", response.text)
+
+        if raw_response:
+            return response.content
 
         data = response.json()
         if isinstance(data, dict) and data.get("code") != "SUCCESS":
@@ -288,7 +292,8 @@ class AsyncUniFiAccessClient:
         )
         self.session = httpx.AsyncClient(
             headers=self.headers,
-            verify=self.verify_ssl
+            verify=self.verify_ssl,
+            timeout=int(os.getenv('UNIFI_SESSION_TIMEOUT', 15)),
         )
 
         self.base_url += f":{self.port}/api/v1"
@@ -304,7 +309,25 @@ class AsyncUniFiAccessClient:
         self.https_certificates = HttpsCertificateManager(self)
         self.notifications = NotificationManager(self)
 
-    async def _make_request(self, method, path, **kwargs):
+    async def _make_request(self, method, path, raw_response=False, **kwargs):
+        """
+        Make an asynchronous HTTP request to the API.
+
+        Args:
+            method (str): HTTP method (e.g., 'GET', 'POST').
+            path (str): API endpoint path (e.g., '/api/v1/developer/users').
+            raw_response (bool): Whether to return the raw response content.
+            **kwargs: Additional arguments for requests (e.g., json, params).
+
+        Returns:
+            dict, list or bytes: The 'data' field from the API response, or raw bytes if raw_response is True.
+
+        Raises:
+            UniFiAccessError: If the API returns an error.
+            AuthenticationError: If HTTP 401 is received.
+            PermissionError: If HTTP 403 is received.
+            RateLimitError: If HTTP 429 is received.
+        """
         url = f"{self.base_url}{path}"
         params_preview = _preview(kwargs.get('params')) if 'params' in kwargs else None
         json_preview = _preview(kwargs.get('json')) if 'json' in kwargs else None
@@ -331,6 +354,9 @@ class AsyncUniFiAccessClient:
                     _preview(getattr(response, 'text', '')),
                 )
                 raise UniFiAccessError(f"HTTP_{response.status_code}", response.text)
+
+        if raw_response:
+            return response.content
 
         data = response.json()
         if isinstance(data, dict) and data.get("code") != "SUCCESS":

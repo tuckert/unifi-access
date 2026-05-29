@@ -34,7 +34,7 @@ class CredentialManager:
             Generated PIN code details, e.g., {"pin_code": "123456"}.
 
         Notes:
-            - Request URL: /developer/credentials/pin-code
+            - Request URL: /developer/credentials/pin_codes
             - Permission Key: edit:credential
             - Method: POST
         """
@@ -69,7 +69,7 @@ class CredentialManager:
             Enrollment status details, e.g., {"status": "completed", "token": "nfc-token"}.
 
         Notes:
-            - Request URL: /developer/credentials/nfc-card/enrollment/:session_id
+            - Request URL: /developer/credentials/nfc_cards/sessions/:session_id
             - Permission Key: view:credential
             - Method: GET
         """
@@ -86,7 +86,7 @@ class CredentialManager:
             API response body (may be empty depending on API behavior).
 
         Notes:
-            - Request URL: /developer/credentials/nfc-card/enrollment/:session_id
+            - Request URL: /developer/credentials/nfc_cards/sessions/:session_id
             - Permission Key: edit:credential
             - Method: DELETE
         """
@@ -103,7 +103,7 @@ class CredentialManager:
             NFC card data as a dictionary.
 
         Notes:
-            - Request URL: /developer/nfc-cards/:id
+            - Request URL: /developer/credentials/nfc_cards/tokens/:nfc_card_token
             - Permission Key: view:credential
             - Method: GET
         """
@@ -117,17 +117,29 @@ class CredentialManager:
             A list of NFC card data dictionaries.
 
         Notes:
-            - Request URL: /developer/nfc-cards
+            - Request URL: /developer/credentials/nfc_cards/tokens
             - Permission Key: view:credential
             - Method: GET
         """
         path = "/developer/credentials/nfc_cards/tokens"
         return self.client._make_request("GET", path)
-    def list_nfc_cards(self) -> List[Dict[str, Any]]:
-        return self.fetch_all_nfc_cards()
+    list_nfc_cards = fetch_all_nfc_cards
 
     def update_nfc_card(self, nfc_card_token: str, alias: str) -> Dict[str, Any]:
-        """Update an NFC card's Alias."""
+        """Update an NFC card's Alias.
+
+        Args:
+            nfc_card_token: The NFC card's token.
+            alias: New alias for the card.
+
+        Returns:
+            Updated NFC card details as a dictionary.
+
+        Notes:
+            - Request URL: /developer/credentials/nfc_cards/tokens/:nfc_card_token
+            - Permission Key: edit:credential
+            - Method: PUT
+        """
         path = f"/developer/credentials/nfc_cards/tokens/{nfc_card_token}"
         data = {"alias": alias}
         return self.client._make_request("PUT", path, json=data)
@@ -142,7 +154,7 @@ class CredentialManager:
             API response body (may be empty depending on API behavior).
 
         Notes:
-            - Request URL: /developer/nfc-cards/:id
+            - Request URL: /developer/credentials/nfc_cards/tokens/:nfc_card_token
             - Permission Key: edit:credential
             - Method: DELETE
         """
@@ -153,7 +165,22 @@ class CredentialManager:
                                   page_num: Optional[int] = None,
                                   page_size: Optional[int] = None,
                                   status: Optional[str] = None,
-                                  ):
+                                  ) -> List[Dict[str, Any]]:
+        """Fetch the list of touch passes.
+
+        Args:
+            page_num: Page number.
+            page_size: Page size.
+            status: Filter by status.
+
+        Returns:
+            A list of touch pass data dictionaries.
+
+        Notes:
+            - Request URL: /developer/credentials/touch_passes
+            - Permission Key: view:credential
+            - Method: GET
+        """
         path = "/developer/credentials/touch_passes"
         params = {}
         if page_num:
@@ -164,16 +191,55 @@ class CredentialManager:
             params["status"] = status
         return self.client._make_request("GET", path, params=params)
 
-    def search_touch_pass(self, condition: str):
+    def search_touch_pass(self, condition: str) -> List[Dict[str, Any]]:
+        """Search for touch passes by condition.
+
+        Args:
+            condition: Search condition string.
+
+        Returns:
+            A list of matching touch pass dictionaries.
+
+        Notes:
+            - Request URL: /developer/credentials/touch_passes/search
+            - Permission Key: view:credential
+            - Method: GET
+        """
         path = "/developer/credentials/touch_passes/search"
         params = {"condition": condition}
         return self.client._make_request("GET", path, params=params)
 
-    def fetch_all_assignable_touch_passes(self):
+    def fetch_all_assignable_touch_passes(self) -> List[Dict[str, Any]]:
+        """Fetch all assignable touch passes.
+
+        Returns:
+            A list of assignable touch pass dictionaries.
+
+        Notes:
+            - Request URL: /developer/credentials/touch_passes/assignable
+            - Permission Key: view:credential
+            - Method: GET
+        """
         path = "/developer/credentials/touch_passes/assignable"
         return self.client._make_request("GET", path)
 
-    def update_touch_pass(self, touch_pass_id: str, card_name: Optional[str], status: Optional[str], bundles: Optional[List[Dict[str, Any]]]):
+    def update_touch_pass(self, touch_pass_id: str, card_name: Optional[str], status: Optional[str], bundles: Optional[List[Dict[str, Any]]]) -> Dict[str, Any]:
+        """Update a touch pass.
+
+        Args:
+            touch_pass_id: Target touch pass ID.
+            card_name: New card name.
+            status: New status.
+            bundles: New bundles list.
+
+        Returns:
+            Updated touch pass data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/credentials/touch_passes/:touch_pass_id
+            - Permission Key: edit:credential
+            - Method: PUT
+        """
         path = f"/developer/credentials/touch_passes/{touch_pass_id}"
         data = {"status": status}
         if card_name:
@@ -182,20 +248,72 @@ class CredentialManager:
             data["bundles"] = bundles
         return self.client._make_request("PUT", path, json=data)
 
-    def fetch_touch_pass_details(self, touch_pass_id: str):
+    def fetch_touch_pass_details(self, touch_pass_id: str) -> Dict[str, Any]:
+        """Fetch details of a specific touch pass.
+
+        Args:
+            touch_pass_id: Target touch pass ID.
+
+        Returns:
+            Touch pass data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/credentials/touch_passes/:touch_pass_id
+            - Permission Key: view:credential
+            - Method: GET
+        """
         path = f"/developer/credentials/touch_passes/{touch_pass_id}"
         return self.client._make_request("GET", path)
 
-    def purchase_touch_passes(self, count: int):
+    def purchase_touch_passes(self, count: int) -> Dict[str, Any]:
+        """Purchase new touch passes.
+
+        Args:
+            count: Number of touch passes to purchase.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/credentials/touch_passes
+            - Permission Key: edit:credential
+            - Method: POST
+        """
         path = f"/developer/credentials/touch_passes"
         params = {"count": count}
         return self.client._make_request("POST", path, params=params)
 
-    def download_qr_code_image(self, visitor_id: str):
+    def download_qr_code_image(self, visitor_id: str) -> Any:
+        """Download QR code image for a visitor.
+
+        Args:
+            visitor_id: Target visitor's ID.
+
+        Returns:
+            Raw image data.
+
+        Notes:
+            - Request URL: /developer/credentials/touch_passes/qr_codes/:visitor_id
+            - Permission Key: view:credential
+            - Method: GET
+        """
         path = f"/developer/credentials/touch_passes/qr_codes/{visitor_id}"
         return self.client._make_request("GET", path)
 
-    def import_third_party_nfc_cards(self, file_path: str):
+    def import_third_party_nfc_cards(self, file_path: str) -> Dict[str, Any]:
+        """Import third-party NFC cards from a CSV file.
+
+        Args:
+            file_path: Path to the CSV file to import.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/credentials/nfc_cards/import
+            - Permission Key: edit:credential
+            - Method: POST
+        """
         path = "/developer/credentials/nfc_cards/import"
         with open(file_path, "rb") as f:
             files = {"file": f}
@@ -206,6 +324,14 @@ class CredentialManager:
 
         Args:
             nfc_cards: A list of dicts with keys "nfc_id" and "alias".
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/credentials/nfc_cards/import
+            - Permission Key: edit:credential
+            - Method: POST
         """
         path = "/developer/credentials/nfc_cards/import"
         output = io.StringIO()
@@ -223,7 +349,15 @@ class CredentialManager:
         """Import 26-bit Wiegand cards from a list of dictionaries.
 
         Args:
-            cards: A list of dicts with keys "facility" and "card".
+            cards: A list of dicts with keys "facility_code" and "card_number".
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/credentials/nfc_cards/import
+            - Permission Key: edit:credential
+            - Method: POST
         """
 
         for card in cards:

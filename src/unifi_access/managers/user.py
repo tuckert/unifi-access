@@ -45,6 +45,11 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users
+            - Permission Key: edit:user
+            - Method: POST
         """
         path = "/developer/users"
         data = {
@@ -70,6 +75,11 @@ class UserManager:
 
         Returns:
             Updated user data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id
+            - Permission Key: edit:user
+            - Method: PUT
         """
         path = f"/developer/users/{user_id}"
         allowed_fields = ["first_name", "last_name", "user_email", "employee_number", "status"]
@@ -86,6 +96,11 @@ class UserManager:
 
         Returns:
             User data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id
+            - Permission Key: view:user
+            - Method: GET
         """
         path = f"/developer/users/{user_id}"
         params = {"expand[]": "access_policy"} if include_access_policies else {}
@@ -107,6 +122,11 @@ class UserManager:
 
         Returns:
             A list of user data dictionaries.
+
+        Notes:
+            - Request URL: /developer/users
+            - Permission Key: view:user
+            - Method: GET
         """
         path = "/developer/users"
         params = {
@@ -125,6 +145,11 @@ class UserManager:
 
         Returns:
             API response body (may be empty depending on API behavior).
+
+        Notes:
+            - Request URL: /developer/users/:id
+            - Permission Key: edit:user
+            - Method: DELETE
         """
         path = f"/developer/users/{user_id}"
         return self.client._make_request("DELETE", path)
@@ -150,6 +175,11 @@ class UserManager:
 
         Returns:
             A list of matching user data dictionaries.
+
+        Notes:
+            - Request URL: /developer/users/search
+            - Permission Key: view:user
+            - Method: GET
         """
         path = "/developer/users/search"
         params = {}
@@ -177,6 +207,11 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/access_policies
+            - Permission Key: edit:user
+            - Method: PUT
         """
         path = f"/developer/users/{user_id}/access_policies"
         data = {
@@ -194,6 +229,11 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/nfc_cards
+            - Permission Key: edit:user
+            - Method: PUT
         """
         path = f"/developer/users/{user_id}/nfc_cards"
         data = {
@@ -211,6 +251,11 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/nfc_cards/delete
+            - Permission Key: edit:user
+            - Method: PUT
         """
         path = f"/developer/users/{user_id}/nfc_cards/delete"
         data = {
@@ -227,6 +272,11 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/pin_codes
+            - Permission Key: edit:user
+            - Method: PUT
         """
         path = f"/developer/users/{user_id}/pin_codes"
         data = {
@@ -242,6 +292,11 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/pin_codes
+            - Permission Key: edit:user
+            - Method: DELETE
         """
         path = f"/developer/users/{user_id}/pin_codes"
         return self.client._make_request("DELETE", path)
@@ -255,6 +310,12 @@ class UserManager:
 
         Returns:
             User group data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/user_groups
+            - Permission Key: edit:user_group
+            - Method: POST
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = "/developer/user_groups"
         data = {
@@ -269,6 +330,12 @@ class UserManager:
 
         Returns:
             A list of user group data dictionaries.
+
+        Notes:
+            - Request URL: /developer/user_groups
+            - Permission Key: view:user_group
+            - Method: GET
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = "/developer/user_groups"
         return self.client._make_request("GET", path)
@@ -281,6 +348,12 @@ class UserManager:
 
         Returns:
             User group data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id
+            - Permission Key: view:user_group
+            - Method: GET
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}"
         return self.client._make_request("GET", path)
@@ -300,6 +373,12 @@ class UserManager:
 
         Returns:
             Updated user group data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id
+            - Permission Key: edit:user_group
+            - Method: PUT
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}"
         data = {}
@@ -317,6 +396,12 @@ class UserManager:
 
         Returns:
             API response body (may be empty depending on API behavior).
+
+        Notes:
+            - Request URL: /developer/user_groups/:id
+            - Permission Key: edit:user_group
+            - Method: DELETE
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}"
         return self.client._make_request("DELETE", path)
@@ -330,6 +415,12 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id/users
+            - Permission Key: edit:user_group
+            - Method: POST
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/users"
         data = user_ids
@@ -344,6 +435,12 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id/users/delete
+            - Permission Key: edit:user_group
+            - Method: POST
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/users/delete"
         data = user_ids
@@ -357,6 +454,12 @@ class UserManager:
 
         Returns:
             A list of user data dictionaries.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id/users
+            - Permission Key: view:user_group
+            - Method: GET
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/users"
         return self.client._make_request("GET", path)
@@ -369,6 +472,12 @@ class UserManager:
 
         Returns:
             A list of user data dictionaries.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id/users/all
+            - Permission Key: view:user_group
+            - Method: GET
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/users/all"
         return self.client._make_request("GET", path)
@@ -387,6 +496,11 @@ class UserManager:
 
         Returns:
             A list of access policy data dictionaries.
+
+        Notes:
+            - Request URL: /developer/users/:id/access_policies
+            - Permission Key: view:user
+            - Method: GET
         """
         path = f"/developer/users/{user_id}/access_policies"
         data = {
@@ -403,6 +517,12 @@ class UserManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id/access_policies
+            - Permission Key: edit:user_group
+            - Method: PUT
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/access_policies"
         data = {
@@ -418,22 +538,67 @@ class UserManager:
 
         Returns:
             A list of access policy data dictionaries.
+
+        Notes:
+            - Request URL: /developer/user_groups/:id/access_policies
+            - Permission Key: view:user_group
+            - Method: GET
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/access_policies"
         return self.client._make_request("GET", path)
 
     def assign_touch_pass_to_user(self, user_id: str, touch_pass_id: str) -> Dict[str, Any]:
-        """Assign a touch pass to a user."""
+        """Assign a touch pass to a user.
+
+        Args:
+            user_id: Target user's ID.
+            touch_pass_id: Touch pass ID to assign.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/touch_passes/:touch_pass_id
+            - Permission Key: edit:user
+            - Method: PUT
+        """
         path = f"/developer/users/{user_id}/touch_passes/{touch_pass_id}"
         return self.client._make_request("PUT", path)
 
     def unassign_touch_pass_from_user(self, user_id: str, touch_pass_id: str) -> Dict[str, Any]:
-        """Unassign/remove a touch pass from a user."""
+        """Unassign/remove a touch pass from a user.
+
+        Args:
+            user_id: Target user's ID.
+            touch_pass_id: Touch pass ID to remove.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/touch_passes/:touch_pass_id
+            - Permission Key: edit:user
+            - Method: DELETE
+        """
         path = f"/developer/users/{user_id}/touch_passes/{touch_pass_id}"
         return self.client._make_request("DELETE", path)
 
     def batch_assign_touch_passes_to_users(self, user_ids: List[str], emails: Optional[List[Dict[str, str]]]) -> Dict[str, Any]:
-        """Assigning unassigned Touch Passes to users using their email addresses."""
+        """Assigning unassigned Touch Passes to users using their email addresses.
+
+        Args:
+            user_ids: List of user IDs.
+            emails: Optional list of email dictionaries.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/touch_passes/assign
+            - Permission Key: edit:user
+            - Method: PUT
+        """
         path = "/developer/users/touch_passes/assign"
         data = {
             "user_ids": user_ids,
@@ -442,16 +607,57 @@ class UserManager:
             data["emails"] = emails
         return self.client._make_request("PUT", path, json=data)
 
-    def assign_license_plate_numbers_to_user(self, user_id: str, license_plate_numbers: List[str]):
+    def assign_license_plate_numbers_to_user(self, user_id: str, license_plate_numbers: List[str]) -> Dict[str, Any]:
+        """Assign license plate numbers to a user.
+
+        Args:
+            user_id: Target user's ID.
+            license_plate_numbers: List of license plate numbers.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/license_plates
+            - Permission Key: edit:user
+            - Method: PUT
+        """
         path = f"/developer/users/{user_id}/license_plates"
         return self.client._make_request("PUT", path, json=license_plate_numbers)
 
-    def unassign_license_plate_number_from_user(self, user_id: str, license_plate_id: str):
+    def unassign_license_plate_number_from_user(self, user_id: str, license_plate_id: str) -> Dict[str, Any]:
+        """Unassign a license plate number from a user.
+
+        Args:
+            user_id: Target user's ID.
+            license_plate_id: License plate ID to remove.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/license_plates/:license_plate_id
+            - Permission Key: edit:user
+            - Method: DELETE
+        """
         path = f"/developer/users/{user_id}/license_plates/{license_plate_id}"
         return self.client._make_request("DELETE", path)
 
     def upload_user_profile_picture(self, user_id: str, image_data: bytes) -> Dict[str, Any]:
-        """Upload a user profile picture."""
+        """Upload a user profile picture.
+
+        Args:
+            user_id: Target user's ID.
+            image_data: Raw image bytes.
+
+        Returns:
+            API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/avatar
+            - Permission Key: edit:user
+            - Method: POST
+        """
         path = f"/developer/users/{user_id}/avatar"
         return self.client._make_request("POST", path, data=image_data)
 

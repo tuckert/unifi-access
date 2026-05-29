@@ -45,7 +45,7 @@ class AccessPolicyManager:
             Access policy data as a dictionary.
 
         Notes:
-            - Request URL: /developer/access-policies
+            - Request URL: /developer/access_policies
             - Permission Key: edit:access_policy
             - Method: POST
         """
@@ -78,7 +78,7 @@ class AccessPolicyManager:
             Updated access policy data as a dictionary.
 
         Notes:
-            - Request URL: /developer/access-policies/:id
+            - Request URL: /developer/access_policies/:id
             - Permission Key: edit:access_policy
             - Method: PUT
         """
@@ -102,7 +102,7 @@ class AccessPolicyManager:
             API response body (may be empty depending on API behavior).
 
         Notes:
-            - Request URL: /developer/access-policies/:id
+            - Request URL: /developer/access_policies/:id
             - Permission Key: edit:access_policy
             - Method: DELETE
         """
@@ -119,7 +119,7 @@ class AccessPolicyManager:
             Access policy data as a dictionary.
 
         Notes:
-            - Request URL: /developer/access-policies/:id
+            - Request URL: /developer/access_policies/:id
             - Permission Key: view:access_policy
             - Method: GET
         """
@@ -133,7 +133,7 @@ class AccessPolicyManager:
             A list of access policy data dictionaries.
 
         Notes:
-            - Request URL: /developer/access-policies
+            - Request URL: /developer/access_policies
             - Permission Key: view:access_policy
             - Method: GET
         """
@@ -163,8 +163,8 @@ class AccessPolicyManager:
             Holiday group data as a dictionary.
 
         Notes:
-            - Request URL: /developer/holiday-groups
-            - Permission Key: edit:policy
+            - Request URL: /developer/access_policies/holiday_groups
+            - Permission Key: edit:holiday_group
             - Method: POST
         """
         path = "/developer/access_policies/holiday_groups"
@@ -192,7 +192,7 @@ class AccessPolicyManager:
             API response body as a dictionary.
 
         Notes:
-            - Request URL: /developer/holiday-groups/:id
+            - Request URL: /developer/access_policies/holiday_groups/:id
             - Permission Key: edit:holiday_group
             - Method: PUT
         """
@@ -216,7 +216,7 @@ class AccessPolicyManager:
             API response body (may be empty depending on API behavior).
 
         Notes:
-            - Request URL: /developer/holiday-groups/:id
+            - Request URL: /developer/access_policies/holiday_groups/:id
             - Permission Key: edit:holiday_group
             - Method: DELETE
         """
@@ -233,7 +233,7 @@ class AccessPolicyManager:
             Holiday group data as a dictionary.
 
         Notes:
-            - Request URL: /developer/holiday-groups/:id
+            - Request URL: /developer/access_policies/holiday_groups/:id
             - Permission Key: view:holiday_group
             - Method: GET
         """
@@ -247,7 +247,7 @@ class AccessPolicyManager:
             A list of holiday group data dictionaries.
 
         Notes:
-            - Request URL: /developer/holiday-groups
+            - Request URL: /developer/access_policies/holiday_groups
             - Permission Key: view:holiday_group
             - Method: GET
         """
@@ -272,6 +272,11 @@ class AccessPolicyManager:
 
         Returns:
             Schedule data as a dictionary.
+
+        Notes:
+            - Request URL: /developer/access_policies/schedules
+            - Permission Key: edit:schedule
+            - Method: POST
         """
         path = "/developer/access_policies/schedules"
         data = {"name": name}
@@ -321,7 +326,7 @@ class AccessPolicyManager:
             API response body as a dictionary.
 
         Notes:
-            - Request URL: /developer/schedules/:id
+            - Request URL: /developer/access_policies/schedules/:id
             - Permission Key: edit:schedule
             - Method: PUT
         """
@@ -347,7 +352,7 @@ class AccessPolicyManager:
             API response body (may be empty depending on API behavior).
 
         Notes:
-            - Request URL: /developer/schedules/:id
+            - Request URL: /developer/access_policies/schedules/:id
             - Permission Key: edit:schedule
             - Method: DELETE
         """
@@ -364,7 +369,7 @@ class AccessPolicyManager:
             Schedule data as a dictionary.
 
         Notes:
-            - Request URL: /developer/schedules/:id
+            - Request URL: /developer/access_policies/schedules/:id
             - Permission Key: view:schedule
             - Method: GET
         """
@@ -378,7 +383,7 @@ class AccessPolicyManager:
             A list of schedule data dictionaries.
 
         Notes:
-            - Request URL: /developer/schedules
+            - Request URL: /developer/access_policies/schedules
             - Permission Key: view:schedule
             - Method: GET
         """

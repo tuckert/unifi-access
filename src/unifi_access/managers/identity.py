@@ -32,7 +32,7 @@ class IdentityManager:
             API response body as a dictionary.
 
         Notes:
-            - Request URL: /developer/identity/invitations
+            - Request URL: /developer/users/identity/invitations
             - Permission Key: edit:identity
             - Method: POST
         """
@@ -51,7 +51,7 @@ class IdentityManager:
             A list of available resource dictionaries.
 
         Notes:
-            - Request URL: /developer/identity/resources
+            - Request URL: /developer/users/identity/assignments
             - Permission Key: view:identity
             - Method: GET
         """
@@ -71,6 +71,11 @@ class IdentityManager:
 
         Returns:
             API response body as a dictionary.
+
+        Notes:
+            - Request URL: /developer/users/:id/identity/assignments
+            - Permission Key: edit:identity
+            - Method: POST
         """
         path = f"/developer/users/{user_id}/identity/assignments"
         data = {
@@ -89,7 +94,7 @@ class IdentityManager:
             A list of resource dictionaries assigned to the user.
 
         Notes:
-            - Request URL: /developer/identity/users/:id/resources
+            - Request URL: /developer/users/:id/identity/assignments
             - Permission Key: view:identity
             - Method: GET
         """
@@ -109,10 +114,10 @@ class IdentityManager:
             API response body as a dictionary.
 
         Notes:
-            - Request URL: /developer/identity/user-groups/resources
+            - Request URL: /developer/user_groups/:id/identity/assignments
             - Permission Key: edit:identity
             - Method: POST
-            - Supported since UniFi Access version 2.2.6
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/identity/assignments"
         data = {
@@ -131,10 +136,10 @@ class IdentityManager:
             A list of resource dictionaries assigned to the user group.
 
         Notes:
-            - Request URL: /developer/identity/user-groups/:id/resources
+            - Request URL: /developer/user_groups/:id/identity/assignments
             - Permission Key: view:identity
             - Method: GET
-            - Supported since UniFi Access version 2.2.6
+            - UniFi Access Requirement: Version 2.2.6 or later
         """
         path = f"/developer/user_groups/{group_id}/identity/assignments"
         return self.client._make_request("GET", path)

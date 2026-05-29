@@ -27,7 +27,9 @@ Create a `.env` file in your project root:
 UNIFI_ACCESS_BASE_URL=https://192.168.1.1
 UNIFI_ACCESS_API_TOKEN=your-api-token-here
 UNIFI_ACCESS_PORT=12445
+UNIFI_SESSION_TIMEOUT=30
 ```
+UNIFI_SESSION_TIMEOUT is optional and defaults to 15 seconds.  Increasing timeout time is sometimes required on busy systems with large amounts of users, doors, etc. and the Unifi console/NVR takes a little longer to process requests.
 
 ### Basic Setup
 
