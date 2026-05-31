@@ -151,6 +151,17 @@ if policies:
     client.access_policies.delete_access_policy(policy['id'])
 ```
 
+### Credential Management
+
+```python
+# Import 26-bit Wiegand cards
+wiegand_cards = [
+    {"facility_code": 100, "card_number": 1234},
+    {"facility_code": 100, "card_number": 1235},
+]
+client.credentials.import_26bit_wiegand_cards(wiegand_cards)
+```
+
 ### Async Support
 
 ```python
@@ -165,18 +176,165 @@ async with AsyncUniFiAccessClient() as client:
 
 ## API Managers
 
-The client provides the following manager interfaces:
+The client provides the following manager interfaces. Click each to see available functions:
 
-- **`client.users`**: User and user group management
-- **`client.visitors`**: Visitor management
-- **`client.access_policies`**: Access policy management
-- **`client.credentials`**: Credential management (NFC cards, PIN codes)
-- **`client.spaces`**: Door and door group management
-- **`client.devices`**: Device management
-- **`client.system_logs`**: System log retrieval
-- **`client.https_certificates`**: HTTPS certificate management
-- **`client.notifications`**: Notification management
-- **`client.identity`**: Identity management (Invitations, resources)
+<details>
+<summary><b>client.users</b> (User and user group management)</summary>
+
+- `create_user`
+- `update_user`
+- `fetch_user`
+- `fetch_all_users`
+- `delete_user`
+- `search_users`
+- `assign_access_policy_to_user`
+- `assign_nfc_card_to_user`
+- `unassign_nfc_card_from_user`
+- `assign_pin_code_to_user`
+- `unassign_pin_code_from_user`
+- `create_user_group`
+- `fetch_all_user_groups`
+- `fetch_user_group`
+- `update_user_group`
+- `delete_user_group`
+- `assign_users_to_user_group`
+- `unassign_users_from_user_group`
+- `fetch_users_in_a_user_group`
+- `fetch_all_users_in_a_user_group`
+- `fetch_access_policies_assigned_to_user`
+- `assign_access_policy_to_user_group`
+- `fetch_access_policies_assigned_to_user_group`
+- `assign_touch_pass_to_user`
+- `unassign_touch_pass_from_user`
+- `batch_assign_touch_passes_to_users`
+- `assign_license_plate_numbers_to_user`
+- `unassign_license_plate_number_from_user`
+- `upload_user_profile_picture`
+</details>
+
+<details>
+<summary><b>client.visitors</b> (Visitor management)</summary>
+
+- `create_visitor`
+- `update_visitor`
+- `fetch_visitor`
+- `fetch_all_visitors`
+- `delete_visitor`
+- `assign_nfc_card_to_visitor`
+- `unassign_nfc_card_from_visitor`
+- `assign_pin_code_to_visitor`
+- `unassign_pin_code_from_visitor`
+- `assign_qr_code_to_visitor`
+- `unassign_qr_code_from_visitor`
+- `assign_license_plate_numbers_to_visitor`
+- `unassign_license_plate_numbers_from_visitor`
+</details>
+
+<details>
+<summary><b>client.access_policies</b> (Access policy management)</summary>
+
+- `create_access_policy`
+- `update_access_policy`
+- `delete_access_policy`
+- `fetch_access_policy`
+- `fetch_all_access_policies`
+- `create_holiday_group`
+- `update_holiday_group`
+- `delete_holiday_group`
+- `fetch_holiday_group`
+- `fetch_all_holiday_groups`
+- `create_schedule`
+- `update_schedule`
+- `delete_schedule`
+- `fetch_schedule`
+- `fetch_all_schedules`
+</details>
+
+<details>
+<summary><b>client.credentials</b> (Credential management)</summary>
+
+- `generate_pin_code`
+- `enroll_nfc_card`
+- `fetch_nfc_card_enrollment_status`
+- `remove_session_created_for_nfc_card_enrollment`
+- `fetch_nfc_card`
+- `fetch_all_nfc_cards` (alias: `list_nfc_cards`)
+- `update_nfc_card`
+- `delete_nfc_card`
+- `fetch_the_touch_pass_list`
+- `search_touch_pass`
+- `fetch_all_assignable_touch_passes`
+- `update_touch_pass`
+- `fetch_touch_pass_details`
+- `purchase_touch_passes`
+- `download_qr_code_image`
+- `import_third_party_nfc_cards`
+- `import_third_party_nfc_cards_as_list`
+- `import_26bit_wiegand_cards`
+</details>
+
+<details>
+<summary><b>client.spaces</b> (Door and door group management)</summary>
+
+- `fetch_door_group_topology`
+- `create_door_group`
+- `fetch_door_group`
+- `update_door_group`
+- `fetch_all_door_groups`
+- `delete_door_group`
+- `fetch_door`
+- `fetch_all_doors`
+- `unlock_door`
+- `set_temporary_door_locking_rule`
+- `fetch_door_lock_rule`
+- `set_door_emergency_status`
+- `fetch_door_emergency_status`
+</details>
+
+<details>
+<summary><b>client.devices</b> (Device management)</summary>
+
+- `fetch_devices`
+- `fetch_access_devices_access_method_settings`
+- `update_access_devices_access_method_settings`
+- `trigger_doorbells`
+</details>
+
+<details>
+<summary><b>client.system_logs</b> (System log retrieval)</summary>
+
+- `fetch_system_logs`
+- `export_system_logs`
+- `fetch_resources_in_system_logs`
+- `fetch_static_resources_in_system_logs`
+</details>
+
+<details>
+<summary><b>client.https_certificates</b> (HTTPS certificate management)</summary>
+
+- `upload_https_certificate`
+- `delete_https_certificate`
+</details>
+
+<details>
+<summary><b>client.notifications</b> (Notification management)</summary>
+
+- `fetch_webhook_endpoints_list`
+- `add_webhook_endpoint`
+- `update_webhook_endpoint`
+- `delete_webhook_endpoint`
+</details>
+
+<details>
+<summary><b>client.identity</b> (Identity management)</summary>
+
+- `send_invitations`
+- `fetch_available_resources`
+- `assign_resources_to_users`
+- `fetch_user_resources`
+- `assign_resources_to_user_groups`
+- `fetch_user_group_resources`
+</details>
 
 
 ## Requirements
