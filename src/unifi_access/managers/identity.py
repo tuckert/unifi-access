@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Literal
 # unifi_access/managers/identity.py
 
 
@@ -41,7 +41,7 @@ class IdentityManager:
 
         return self.client._make_request("POST", path, json=data)
 
-    def fetch_available_resources(self, resource_type: Optional[str] = None) -> List[Dict[str, Any]]:
+    def fetch_available_resources(self, resource_type: Optional[Literal['ev_station', 'vpn', 'wifi']] = None) -> List[Dict[str, Any]]:
         """Fetch available resources that can be assigned.
 
         Args:

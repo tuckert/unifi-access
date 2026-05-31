@@ -271,6 +271,7 @@ class AsyncUniFiAccessClient:
     system_logs: SystemLogManager
     https_certificates: HttpsCertificateManager
     notifications: NotificationManager
+    identity: IdentityManager
 
     def __init__(self, base_url, api_token, port='12445', verify_ssl=False, cert_data=None, key_data=None):
         self.base_url = base_url.rstrip('/')
@@ -308,6 +309,7 @@ class AsyncUniFiAccessClient:
         self.system_logs = SystemLogManager(self)
         self.https_certificates = HttpsCertificateManager(self)
         self.notifications = NotificationManager(self)
+        self.identity = IdentityManager(self)
 
     async def _make_request(self, method, path, raw_response=False, **kwargs):
         """
