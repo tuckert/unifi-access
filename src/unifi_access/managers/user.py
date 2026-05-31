@@ -658,6 +658,9 @@ class UserManager:
             - Permission Key: edit:user
             - Method: POST
         """
+        files = {
+            "file": image_data,
+        }
         path = f"/developer/users/{user_id}/avatar"
-        return self.client._make_request("POST", path, data=image_data)
+        return self.client._make_request("POST", path, files=files)
 

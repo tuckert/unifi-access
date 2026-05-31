@@ -37,10 +37,6 @@ class HttpsCertificateManager:
             "key": key,
             "cert": cert
         }
-        data = {
-            "key": key,
-            "cert": cert
-        }
         result = self.client._make_request("POST", path, files=files)
         return result
 

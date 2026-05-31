@@ -18,7 +18,7 @@ class NotificationManager:
         """
         self.client = client
 
-    def list_webhook_endpoints(self, page_num: Optional[int] = None, page_size: Optional[int] = None) -> List[Dict[str, Any]]:
+    def fetch_webhook_endpoints_list(self, page_num: Optional[int] = None, page_size: Optional[int] = None) -> List[Dict[str, Any]]:
         """Fetch the list of webhook endpoints with optional pagination.
 
         Args:

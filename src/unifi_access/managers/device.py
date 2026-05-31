@@ -19,7 +19,7 @@ class DeviceManager:
         """
         self.client = client
 
-    def fetch_devices(self, refresh: Optional[bool]) -> List[Dict[str, Any]]:
+    def fetch_devices(self, refresh: Optional[bool] = False) -> List[Dict[str, Any]]:
         """Fetch all devices.
 
         Returns:
