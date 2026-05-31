@@ -279,15 +279,11 @@ class AccessPolicyManager:
             - Method: POST
         """
         path = "/developer/access_policies/schedules"
-        data = {"name": name}
+        data = {
+            "name": name,
 
-        #TODO Bug in unifi api.  temporary fix below.  Set a holiday schedule because an empty one throws errors on the front end
-        data['holiday_schedule'] = [
-            {'start_time': '12:00:00',
-             'end_time': '13:00:00',}
-        ]
-
-        data['week_schedule'] = {
+            # week_schedule is optional, but must be supplied empty or unifi rejects.
+            "week_schedule": {
                 'monday':[],
                 'tuesday':[],
                 'wednesday':[],
@@ -296,6 +292,7 @@ class AccessPolicyManager:
                 'saturday':[],
                 'sunday':[],
             }
+        }
 
         if week_schedule:
             data['week_schedule'] = week_schedule
