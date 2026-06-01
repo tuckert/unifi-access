@@ -279,23 +279,21 @@ class AccessPolicyManager:
             - Method: POST
         """
         path = "/developer/access_policies/schedules"
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         data = {
             "name": name,
 
             # week_schedule is optional, but must be supplied empty or unifi rejects.
-            "week_schedule": {
-                'monday':[],
-                'tuesday':[],
-                'wednesday':[],
-                'thursday':[],
-                'friday':[],
-                'saturday':[],
-                'sunday':[],
-            }
+            "week_schedule": {day: [] for day in days}
         }
 
         if week_schedule:
-            data['week_schedule'] = week_schedule
+            if "everyday" in week_schedule:
+                for day in days:
+                    data["week_schedule"][day] = week_schedule["everyday"]
+            for day in days:
+                if day in week_schedule:
+                    data["week_schedule"][day] = week_schedule[day]
         if holiday_group_id:
             data['holiday_group_id'] = holiday_group_id
         if holiday_schedule:
@@ -332,7 +330,15 @@ class AccessPolicyManager:
         if name:
             data["name"] = name
         if week_schedule:
-            data['week_schedule'] = week_schedule
+            days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+            final_schedule = {day: [] for day in days}
+            if "everyday" in week_schedule:
+                for day in days:
+                    final_schedule[day] = week_schedule["everyday"]
+            for day in days:
+                if day in week_schedule:
+                    final_schedule[day] = week_schedule[day]
+            data['week_schedule'] = final_schedule
         if holiday_group_id:
             data['holiday_group_id'] = holiday_group_id
         if holiday_schedule:

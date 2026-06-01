@@ -39,7 +39,7 @@ class VisitorManager:
             visitor_company: Optional[str] = None,
             visit_reason: str = "Others",
             resources: Optional[List] = None,
-            week_schedule: Optional[List] = None,
+            week_schedule: Optional[Dict[str, Any]] = None,
             **kwargs: Any,
     ) -> Dict[str, Any]:
         """Create/register a new visitor.
@@ -67,6 +67,7 @@ class VisitorManager:
             - Method: POST
         """
         path = "/developer/visitors"
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         data = {
             'first_name': first_name,
             'last_name': last_name,
@@ -78,8 +79,16 @@ class VisitorManager:
             'end_time': end_time,
             'visit_reason': visit_reason,
             'resources': resources,
-            'week_schedule': week_schedule,
+            'week_schedule': {day: [] for day in days},
         }
+
+        if week_schedule:
+            if "everyday" in week_schedule:
+                for day in days:
+                    data["week_schedule"][day] = week_schedule["everyday"]
+            for day in days:
+                if day in week_schedule:
+                    data["week_schedule"][day] = week_schedule[day]
 
         return self.client._make_request("POST", path, json=data)
 
@@ -97,7 +106,7 @@ class VisitorManager:
             end_time: Optional[str] = None,
             visit_reason: Optional[str] = None,
             resources: Optional[List] = None,
-            week_schedule: Optional[List] = None,
+            week_schedule: Optional[Dict[str, Any]] = None,
             **kwargs: Any,
         ) -> Dict[str, Any]:
         """Update visitor details.
@@ -138,8 +147,20 @@ class VisitorManager:
             'end_time': end_time,
             'visit_reason': visit_reason,
             'resources': resources,
-            'week_schedule': week_schedule,
         }
+        if week_schedule:
+            days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+            final_schedule = {day: [] for day in days}
+            if "everyday" in week_schedule:
+                for day in days:
+                    final_schedule[day] = week_schedule["everyday"]
+            for day in days:
+                if day in week_schedule:
+                    final_schedule[day] = week_schedule[day]
+            data['week_schedule'] = final_schedule
+        else:
+            data['week_schedule'] = None
+
         return self.client._make_request("PUT", path, json=data)
 
 

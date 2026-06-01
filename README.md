@@ -121,6 +121,37 @@ client.visitors.update_visitor(visitor['id'], remarks="VIP visitor")
 client.visitors.delete_visitor(visitor['id'])
 ```
 
+### Flexible Schedules
+
+Both Visitor and Access Policy managers support flexible weekly schedules. You only need to provide the days you want to set; other days will default to empty. You can also use the `everyday` shortcut.
+
+```python
+# Partial schedule - only Monday is set, others default to empty
+client.visitors.create_visitor(
+    ...,
+    week_schedule={
+        "monday": [{"start_time": "09:00:00", "end_time": "17:00:00"}]
+    }
+)
+
+# Everyday shortcut - applies to all 7 days
+client.access_policies.create_schedule(
+    name="Everyday Access",
+    week_schedule={
+        "everyday": [{"start_time": "08:00:00", "end_time": "20:00:00"}]
+    }
+)
+
+# Everyday with override - Sunday will be empty, others will have the everyday schedule
+client.visitors.create_visitor(
+    ...,
+    week_schedule={
+        "everyday": [{"start_time": "08:00:00", "end_time": "20:00:00"}],
+        "sunday": []
+    }
+)
+```
+
 ### Door Management
 
 ```python
